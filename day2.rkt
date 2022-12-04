@@ -9,14 +9,12 @@
 (define rps-res-lookup #('draw 'win 'lose 'lose 'draw 'win 'win 'lose 'draw))
 
 (define rps-p1-score-lookup
-  (let ([i 0])
-    (vector->immutable-vector
-     (vector-map (lambda [res] (define score (case res
-                                               [('win) (+ i 6 1)]
-                                               [('lose) (+ i 0 1)]
-                                               [('draw) (+ i 3 1)]))
-                   (set! i (remainder (+ i 1) 3))
-                   score) rps-res-lookup))))
+  (vector->immutable-vector
+   (for/vector #:length 9 ([res (in-vector rps-res-lookup)] [i (in-cycle (in-inclusive-range 1 3))])
+     (case res
+       [('win) (+ i 6)]
+       [('lose) (+ i 0)]
+       [('draw) (+ i 3)]))))
 
 (define (rps-res elf me) (vector-ref rps-res-lookup (+ me (* elf 3))))
 (define (rps-part1 elf me) (vector-ref rps-p1-score-lookup (+ me (* elf 3))))
