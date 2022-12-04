@@ -5,26 +5,19 @@
 (provide day3 day3-exe)
 
 (define (calc-priority racksack)
-  (sequence-fold (lambda [acc item]
-                   (define priority
-                     (if
-                      (char>=? item #\a)
-                      (+ 1 (- (char->integer item) (char->integer #\a)))
-                      (+ 27 (- (char->integer item) (char->integer #\A)))))
-                   (+ acc priority)
-                   )
-                 0
-                 (in-immutable-set racksack)))
+  (for/sum ([item (in-immutable-set racksack)]) 
+    (if
+     (char>=? item #\a)
+     (+ 1 (- (char->integer item) (char->integer #\a)))
+     (+ 27 (- (char->integer item) (char->integer #\A))))))
 
 (define (day3-part1 input)
-  (foldl (lambda [line acc]
-           (define half-size (/ (string-length line) 2))
-           (define first-half (list->set (string->list (substring line 0 half-size))))
-           (define second-half (list->set (string->list (substring line half-size))))
-           (define common (set-intersect first-half second-half))
-           (+ acc (calc-priority common)))
-         0
-         (line-split input)))
+  (for/sum ([line (in-list (line-split input))]) 
+    (define half-size (/ (string-length line) 2))
+    (define first-half (list->set (string->list (substring line 0 half-size))))
+    (define second-half (list->set (string->list (substring line half-size))))
+    (define common (set-intersect first-half second-half))
+    (calc-priority common)))
 
 (define (day3-part2 input)
   (let run ([acc 0] [list (line-split input)] )

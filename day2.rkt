@@ -44,8 +44,8 @@
          (define elf-shape (- (char->integer (string-ref (second split-line) 0)) (char->integer #\X)))
          (list my-shape elf-shape)) (line-split input)))
 
-(define (day2-part1 input) (foldl (lambda [match acc] (+ acc (apply rps-part1 match))) 0 (process-input input)))
-(define (day2-part2 input) (foldl (lambda [match acc] (+ acc (apply rps-part2 match))) 0 (process-input input)))
+(define (day2-part1 input) (for/sum ([match (in-list (process-input input))]) (apply rps-part1 match)))
+(define (day2-part2 input) (for/sum ([match (in-list (process-input input))]) (apply rps-part2 match)))
 (define (day2 input) (list (day2-part1 input) (day2-part2 input)))
 
 (define (day2-exe) (exe-day day2 "input/Day2.txt"))
