@@ -12,5 +12,4 @@
   (define input-file (open-input-file input-loc))
   (define input (port->string input-file))
   (close-input-port input-file)
-  (day-func input)
-  )
+  (day-func input))
